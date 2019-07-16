@@ -9,4 +9,14 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>PoolTest</display-name>
+    <servlet-name>PoolTest</servlet-name>
+    <servlet-class>me.sifan.servlet.PoolTest</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PoolTest</servlet-name>
+    <url-pattern>/PoolTest</url-pattern>
+  </servlet-mapping>
 </web-app>
