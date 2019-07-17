@@ -2,6 +2,7 @@ package me.sifan.servlet;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -14,30 +15,43 @@ import me.sifan.jdbc.utils.JDBCUtils;
 public class PoolTest extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Date startTime = new Date();
 		
-		Connection conn = JDBCUtils.getConnection();
 		
-		Date endTime = new Date();
+		Connection conn = null;
 		
-		int time = (int)(endTime.getTime() - startTime.getTime());
+		for(int i = 0; i < 21; i++) {
+			try {
+				Date startTime = new Date();
+				conn = JDBCUtils.getConnection();
+				System.out.println(conn + "" + (i+1));
+				Date endTime = new Date();
+				int time = (int)(endTime.getTime() - startTime.getTime());
+				System.out.println(time);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		
-		System.out.println(conn);
-		System.out.println(time);
 		
-		startTime = new Date();
 		
-		Connection conn2 = JDBCUtils.getConnectionNotByPool();	
 		
-		endTime = new Date();
 		
-		time = (int)(endTime.getTime() - startTime.getTime());
+	
 		
-		System.out.println(conn2);
-		System.out.println(time);
 		
-		JDBCUtils.release(null, null, conn);
-		JDBCUtils.release(null, null, conn2);
+//		startTime = new Date();
+//		
+//		Connection conn2 = JDBCUtils.getConnectionNotByPool();	
+//		
+//		endTime = new Date();
+//		
+//		time = (int)(endTime.getTime() - startTime.getTime());
+//		
+//		System.out.println(conn2);
+//		System.out.println(time);
+//		
+//		JDBCUtils.release(null, null, conn);
+//		JDBCUtils.release(null, null, conn2);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -40,7 +40,7 @@ public class JDBCUtils {
 	}
 	
 	//获取连接
-	public static Connection getConnection() {
+	public static Connection getConnection() throws SQLException {
 		return pool.getConnection();
 	}
 	
