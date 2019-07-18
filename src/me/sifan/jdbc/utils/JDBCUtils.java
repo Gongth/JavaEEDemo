@@ -9,7 +9,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+import javax.sql.DataSource;
+
 import me.sifan.jdbc.ConnectionPool;
+import me.sifan.jdbc.ConnectionWrapper;
+import me.sifan.jdbc.MyDataSource;
 
 public class JDBCUtils {
 	
@@ -17,7 +21,7 @@ public class JDBCUtils {
 	private static String url = null;
 	private static String username = null;
 	private static String password = null;
-	private static ConnectionPool pool = null;
+	private static MyDataSource datasource = null;
 	
 	static {
 		//获取配置文件的输入流
@@ -33,7 +37,7 @@ public class JDBCUtils {
 			//注册驱动
 			Class.forName(driverClass);
 			//获取数据库连接池
-			pool = new ConnectionPool(url, username, password);
+			datasource = new MyDataSource(url,username,password);
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -41,7 +45,7 @@ public class JDBCUtils {
 	
 	//获取连接
 	public static Connection getConnection() throws SQLException {
-		return pool.getConnection();
+		return new ConnectionWrapper(datasource.getConnection(), datasource.list);
 	}
 	
 	public static Connection getConnectionNotByPool() {
@@ -58,7 +62,7 @@ public class JDBCUtils {
 	public static void release(ResultSet rs, Statement st, Connection conn) {
 		closeRs(rs);
 		closeSt(st);
-		pool.freeConn(conn);
+		closeConn(conn);
 	}
 	
 	private static void closeRs(ResultSet rs) {
